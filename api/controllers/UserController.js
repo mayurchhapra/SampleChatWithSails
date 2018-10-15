@@ -5,7 +5,7 @@ module.exports = {
   // represents one user--this is so that it's easy to demonstrate inter-user
   // communication by opening a bunch of tabs or windows.  In the real world,
   // you'd want multiple tabs to represent the same logged-in user.
-  announce: function(req, res) {
+  announce: async (req, res) => {
 
     // Get the socket ID from the reauest
     var socketId = sails.sockets.id(req);
@@ -15,14 +15,8 @@ module.exports = {
 
     // Create the session.users hash if it doesn't exist already
     session.users = session.users || {};
-
-    User.create({
-      name: 'unknown',
-      socketId: socketId
-    }).exec(function(err, user) {
-      if (err) {
-        return res.serverError(err);
-      }
+    try {
+      let user = await User.create({ name: 'unknown', socketId: socketId });
 
       // Save this user in the session, indexed by their socket ID.
       // This way we can look the user up by socket ID later.
@@ -46,7 +40,9 @@ module.exports = {
 
       res.json(user);
 
-    });
+    } catch (error) {
+      return res.serverError(err);
+    }
 
 
   }
