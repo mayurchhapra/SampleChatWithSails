@@ -1,7 +1,7 @@
 module.exports = {
 
   // Join a chat room -- this is bound to 'post /room/:roomId/users'
-  'join': function(req, res, next) {
+  'join': async (req, res, next) => {
     // Get the ID of the room to join
     var roomId = req.param('roomId');
     // Subscribe the requesting socket to the "message" context, 
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   // Leave a chat room -- this is bound to 'delete /room/:roomId/users'
-  'leave': function(req, res, next) {
+  'leave': async (req, res, next) => {
     // Get the ID of the room to join
     var roomId = req.param('roomId');
     // Unsubscribe the requesting socket from the "message" context
